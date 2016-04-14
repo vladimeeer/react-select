@@ -9,7 +9,7 @@ var Option = React.createClass({
 	displayName: 'Option',
 
 	propTypes: {
-		addLabelText: React.PropTypes.string, // string rendered in case of allowCreate option passed to ReactSelect
+		addLabelRender: React.PropTypes.func, // string rendered in case of allowCreate option passed to ReactSelect
 		className: React.PropTypes.string, // className (based on mouse position)
 		mouseDown: React.PropTypes.func, // method to handle click on option element
 		mouseEnter: React.PropTypes.func, // method to handle mouseEnter on option element
@@ -40,7 +40,7 @@ var Option = React.createClass({
 	},
 	render: function render() {
 		var option = this.props.option;
-		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.props.renderFunc(option);
+		var label = option.create ? this.props.addLabelRender(option.label) : this.props.renderFunc(option);
 		var optionClasses = classes(this.props.className, option.className);
 
 		return option.disabled ? React.createElement(
@@ -93,7 +93,7 @@ var Select = React.createClass({
 	displayName: 'Select',
 
 	propTypes: {
-		addLabelText: React.PropTypes.string, // placeholder displayed when you want to add a label on a multi-value input
+		addLabelRender: React.PropTypes.func,
 		allowCreate: React.PropTypes.bool, // whether to allow creation of new entries
 		asyncOptions: React.PropTypes.func, // function to call to get options
 		autoload: React.PropTypes.bool, // whether to auto-load the default async options set
@@ -138,7 +138,9 @@ var Select = React.createClass({
 
 	getDefaultProps: function getDefaultProps() {
 		return {
-			addLabelText: 'Add "{label}"?',
+			addLabelRender: function addLabelRender(label) {
+				return 'Add "{label}"?'.replace('{label}', label);
+			},
 			allowCreate: false,
 			asyncOptions: undefined,
 			autoload: true,
@@ -837,7 +839,7 @@ var Select = React.createClass({
 				mouseDown: this.selectValue,
 				mouseEnter: this.focusOption,
 				mouseLeave: this.unfocusOption,
-				addLabelText: this.props.addLabelText,
+				addLabelRender: this.props.addLabelRender,
 				option: op,
 				ref: ref
 			});

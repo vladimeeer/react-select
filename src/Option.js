@@ -3,7 +3,7 @@ var classes = require('classnames');
 
 var Option = React.createClass({
 	propTypes: {
-		addLabelText: React.PropTypes.string,          // string rendered in case of allowCreate option passed to ReactSelect
+		addLabelRender: React.PropTypes.func,          // string rendered in case of allowCreate option passed to ReactSelect
 		className: React.PropTypes.string,             // className (based on mouse position)
 		mouseDown: React.PropTypes.func,               // method to handle click on option element
 		mouseEnter: React.PropTypes.func,              // method to handle mouseEnter on option element
@@ -34,7 +34,7 @@ var Option = React.createClass({
 	},
 	render () {
 		var option = this.props.option;
-		var label = option.create ? this.props.addLabelText.replace('{label}', option.label) : this.props.renderFunc(option);
+		var label = option.create ? this.props.addLabelRender(option.label) : this.props.renderFunc(option);
 		var optionClasses = classes(this.props.className, option.className);
 
 		return option.disabled ? (

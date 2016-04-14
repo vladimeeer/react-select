@@ -17,7 +17,7 @@ var Select = React.createClass({
 	displayName: 'Select',
 
 	propTypes: {
-		addLabelText: React.PropTypes.string,      // placeholder displayed when you want to add a label on a multi-value input
+		addLabelRender: React.PropTypes.func,
 		allowCreate: React.PropTypes.bool,         // whether to allow creation of new entries
 		asyncOptions: React.PropTypes.func,        // function to call to get options
 		autoload: React.PropTypes.bool,            // whether to auto-load the default async options set
@@ -62,7 +62,7 @@ var Select = React.createClass({
 
 	getDefaultProps () {
 		return {
-			addLabelText: 'Add "{label}"?',
+			addLabelRender: (label) => {return 'Add "{label}"?'.replace('{label}', label)},
 			allowCreate: false,
 			asyncOptions: undefined,
 			autoload: true,
@@ -747,7 +747,7 @@ var Select = React.createClass({
 				mouseDown: this.selectValue,
 				mouseEnter: this.focusOption,
 				mouseLeave: this.unfocusOption,
-				addLabelText: this.props.addLabelText,
+				addLabelRender: this.props.addLabelRender,
 				option: op,
 				ref: ref
 			});

@@ -661,6 +661,19 @@ var Select = React.createClass({
 		this.focusAdjacentOption('previous');
 	},
 
+	createNewOption() {
+		if (this.props.allowCreate && this.state.inputValue.trim()) {
+			var inputValue = this.state.inputValue;
+			return this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
+				value: inputValue,
+				label: inputValue,
+				create: true
+			};
+		} else {
+			return null;
+		}
+	},
+
 	focusAdjacentOption (dir) {
 		this._focusedOptionReveal = true;
 		var ops = this.state.filteredOptions.filter(function(op) {
@@ -719,14 +732,9 @@ var Select = React.createClass({
 		}
 		// Add the current value to the filtered options in last resort
 		var options = this.state.filteredOptions;
-		if (this.props.allowCreate && this.state.inputValue.trim()) {
-			var inputValue = this.state.inputValue;
+		let newOption = this.createNewOption();
+		if (newOption !== null) {
 			options = options.slice();
-			var newOption = this.props.newOptionCreator ? this.props.newOptionCreator(inputValue) : {
-				value: inputValue,
-				label: inputValue,
-				create: true
-			};
 			options.unshift(newOption);
 		}
 		var ops = Object.keys(options).map(function(key) {

@@ -679,6 +679,13 @@ var Select = React.createClass({
 		var ops = this.state.filteredOptions.filter(function(op) {
 			return !op.disabled;
 		});
+
+		let newOption = this.createNewOption();
+		if (newOption !== null) {
+			ops = ops.slice();
+			ops.unshift(newOption);
+		}
+
 		if (!this.state.isOpen) {
 			this.setState({
 				isOpen: true,
@@ -692,7 +699,7 @@ var Select = React.createClass({
 		}
 		var focusedIndex = -1;
 		for (var i = 0; i < ops.length; i++) {
-			if (this.state.focusedOption === ops[i]) {
+			if (this.state.focusedOption === ops[i] || (this.state.focusedOption.create && ops[i].create)) {
 				focusedIndex = i;
 				break;
 			}

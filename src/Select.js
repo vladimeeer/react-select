@@ -642,6 +642,67 @@ const Select = React.createClass({
 		}
 	},
 
+	buildMenu () {
+		var focusedValue = this.state.focusedOption ? this.state.focusedOption[this.props.valueKey] : null;
+		var renderLabel = this.props.optionRenderer || this.renderOptionLabel;
+		if (this.state.filteredOptions.length > 0) {
+			focusedValue = focusedValue == null ? this.state.filteredOptions[0] : focusedValue;
+		}
+		// Add the current value to the filtered options in last resort
+		var options = this.state.filteredOptions;
+		let newOption = this.createNewOption();
+		if (newOption !== null) {
+			options = options.slice();
+			options.unshift(newOption);
+		}
+		var ops = Object.keys(options).map(function(key) {
+			var op = options[key];
+			var isSelected = this.state.value === op[this.props.valueKey];
+			var isFocused = focusedValue === op[this.props.valueKey];
+			var optionClass = classes({
+				'Select-option': true,
+				'is-selected': isSelected,
+				'is-focused': isFocused,
+				'is-disabled': op.disabled
+			});
+			var ref = isFocused ? 'focused' : null;
+			var optionResult = React.createElement(this.props.optionComponent, {
+				key: 'option-' + op[this.props.valueKey],
+				className: optionClass,
+				renderFunc: renderLabel,
+				mouseDown: this.selectValue,
+				mouseEnter: this.focusOption,
+				mouseLeave: this.unfocusOption,
+				addLabelRender: this.props.addLabelRender,
+				option: op,
+				ref: ref
+			});
+			return optionResult;
+		}, this);
+
+		if (ops.length) {
+			return ops;
+		} else {
+			var noResultsText, promptClass;
+			if (this.isLoading()) {
+				promptClass = 'Select-searching';
+				noResultsText = this.props.searchingText;
+			} else if (this.state.inputValue || !this.props.asyncOptions) {
+				promptClass = 'Select-noresults';
+				noResultsText = this.props.noResultsText;
+			} else {
+				promptClass = 'Select-search-prompt';
+				noResultsText = this.props.searchPromptText;
+			}
+
+			return (
+				<div className={promptClass}>
+					{noResultsText}
+				</div>
+			);
+		}
+	},
+
 	renderInput (valueArray) {
 		var className = classNames('Select-input', this.props.inputProps.className);
 		if (this.props.disabled || !this.props.searchable) {

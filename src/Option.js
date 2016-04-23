@@ -4,6 +4,7 @@ import classNames from 'classnames';
 const Option = React.createClass({
 	propTypes: {
 		children: React.PropTypes.node,
+		addLabelRender: React.PropTypes.func,          // string rendered in case of allowCreate option passed to ReactSelect
 		className: React.PropTypes.string,             // className (based on mouse position)
 		isDisabled: React.PropTypes.bool,              // the option is disabled
 		isFocused: React.PropTypes.bool,               // the option is focused
@@ -64,8 +65,9 @@ const Option = React.createClass({
 		}
 	},
 	render () {
-		var { option } = this.props;
-		var className = classNames(this.props.className, option.className);
+		var option = this.props.option;
+		var label = option.create ? this.props.addLabelRender(option.label) : this.props.renderFunc(option);
+		var optionClasses = classes(this.props.className, option.className);
 
 		return option.disabled ? (
 			<div className={className}

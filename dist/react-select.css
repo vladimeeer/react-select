@@ -244,6 +244,10 @@
   background-color: rgba(0, 126, 255, 0.08);
   color: #333;
 }
+.Select-option.is-selected {
+  background-color: #DAD1D1;
+  color: #333;
+}
 .Select-option.is-disabled {
   color: #cccccc;
   cursor: default;

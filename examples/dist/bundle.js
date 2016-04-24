@@ -1302,7 +1302,9 @@ var Select = _react2['default'].createClass({
 									onFocus: _this4.focusOption,
 									option: option,
 									isSelected: isSelected,
-									ref: optionRef
+									ref: optionRef,
+									renderFunc: renderLabel,
+									addLabelRender: _this4.props.addLabelRender
 								},
 								renderLabel(option)
 							);

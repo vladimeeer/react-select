@@ -855,6 +855,8 @@ const Select = React.createClass({
 							option={option}
 							isSelected={isSelected}
 							ref={optionRef}
+							renderFunc={renderLabel}
+							addLabelRender={this.props.addLabelRender}
 							>
 							{renderLabel(option)}
 						</Option>
